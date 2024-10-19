@@ -2,7 +2,7 @@
 A tool to analyze the Apache/nginx server web log and detect potential intrusion attempts.
 
 ```
-$python3 .\wls.py -ss .\log
+python3 wls.py -ss log
 SQLi  |  203.0.113.5 - - [11/Oct/2024:14:32:10 +0200] "GET /product?id=1;DROP TABLE users HTTP/1.1" 500 234
 Xss  |  198.51.100.9 - - [11/Oct/2024:14:32:13 +0200] "GET /search?q=<script>alert('XSS')</script> HTTP/1.1" 400 345
 SSTI  |  198.51.100.9 - - [11/Oct/2024:14:32:21 +0200] "GET /api/item?id={{7*7}} HTTP/1.1" 500 1024
@@ -17,12 +17,13 @@ LFI  |  192.168.1.85 - - [11/Oct/2024:14:32:01 +0200] "GET /etc/passwd HTTP/1.1"
 
 ### Installation
 ```
-cmd
+git clone https://github.com/carambole25/webLogScan.git
 ```
 
 Tester l'installation :
 ```
-cmd
+cd webLogScan/
+python3 wls.py
 ```
 
 ## Commande
