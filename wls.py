@@ -1,5 +1,6 @@
 import sys
 from urllib.parse import unquote
+import subprocess
 
 
 SQLi_car = ["'", "--", "UNION", "AND", "OR", "DROP", "TABLE"]
@@ -47,20 +48,14 @@ def ip_scan(path):
     print(ip)
 
 def ban_scan(path):
-    # Vérifier si fail2ban est installé
-        # si non l'installer
-    # Vérifier si il est installé
-        # si non quitter et expliquer l'erreur
-    # Vérifier si fail2ban est lancé
-        # si non le lancer
-    # Vérifier si fail2ban est lancé
-        # si non quitter et expliquer l'erreur
     content_log = get_content(path)
     suspect_lines = bad_content_detector(content_log)
-    ip = list(set([i.split()[0] for i in suspect_lines]))
-    # pour chaque ip
-        # bannir l'ip avec fail2ban
-    print("pas encore dev")
+    ip_liste = list(set([i.split()[0] for i in suspect_lines]))
+
+    subprocess.run(['ufw', 'enable'])
+    for ip in ip_liste:
+        subprocess.run(['ufw', 'deny', 'from', ip])
+    subprocess.run(['ufw', 'reload'])
 
 def display_banner():
     print("WLS - webLogScan")
