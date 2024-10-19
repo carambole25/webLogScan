@@ -36,6 +36,6 @@ example : python3 wls.py -ss /var/log/apache2/log
 ```
 
 ## To do
-- Add automatic ban functionalities linked to fail2ban
+- Make the code more clean
 - Post request analysiser
 - Save data in json format
