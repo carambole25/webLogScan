@@ -31,6 +31,7 @@ python3 wls.py
 -ss simple scan : retrieve suspicious lines
 -is ip scan : recover only the IPs responsible for suspicious requests
 -bs ban scan : ban IPs that made suspicious requests
+
 example : python3 wls.py -ss /var/log/apache2/log
 ```
 
