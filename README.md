@@ -28,13 +28,20 @@ python3 wls.py
 
 ## Commande
 ```
--ss simple scan : retrieve suspicious lines
--is ip scan : recover only the IPs responsible for suspicious requests
--bs ban scan : ban IPs that made suspicious requests
+usage: wls.py [-h] [-ss] [-is] [-bs] path
+
+positional arguments:
+  path                Path to the file to scan
+
+options:
+  -h, --help          show this help message and exit
+  -ss, --simple-scan  Perform a simple scan
+  -is, --ip-scan      Perform an IP scan
+  -bs, --ban-scan     Perform a ban scan
 
 example : python3 wls.py -ss /var/log/apache2/log
 ```
 
 ## To do
-- Make the code more clean
-- Save data in json format
+- Make the code more clean [x]
+- Save data in json format []
