@@ -43,5 +43,5 @@ example : python3 wls.py -ss /var/log/apache2/log
 ```
 
 ## To do
-- Make the code more clean [x]
-- Save data in json format []
+- [x] Make the code more clean 
+- [] Save data in json format
