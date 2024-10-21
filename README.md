@@ -6,7 +6,7 @@ python3 wls.py -ss log
 SQLi  |  192.168.0.12 - - [21/Oct/2024:10:23:45 +0000] "GET /index.php?id=1' OR '1'='1 HTTP/1.1" 200 532 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 XSS   |  203.0.113.5 - - [21/Oct/2024:10:25:12 +0000] "GET /search.php?query=<script>alert('XSS')</script> HTTP/1.1" 200 672 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64)"
 SQLi  |  203.0.113.12 - - [21/Oct/2024:10:27:45 +0000] "GET /product/1' UNION SELECT username, password FROM users-- HTTP/1.1" 200 856 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
-RCE   |  192.168.0.15 - - [21/Oct/2024:10:29:03 +0000] "GET /home?name={{7*7}} HTTP/1.1" 200 925 "-" "curl/7.64.1"
+SSTI  |  192.168.0.15 - - [21/Oct/2024:10:29:03 +0000] "GET /home?name={{7*7}} HTTP/1.1" 200 925 "-" "/7.64.1"
 LFI   |  198.51.100.2 - - [21/Oct/2024:10:30:27 +0000] "GET /etc/passwd HTTP/1.1" 403 138 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0)"
 LFI   |  203.0.113.17 - - [21/Oct/2024:10:31:48 +0000] "GET /page.php?file=../../../../etc/passwd HTTP/1.1" 200 1240 "-" "Mozilla/5.0 (X11; Linux x86_64)"
 XSS   |  198.51.100.33 - - [21/Oct/2024:10:33:06 +0000] "GET /login.php?username=admin&password=<script>alert('XSS')</script> HTTP/1.1" 403 523 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
