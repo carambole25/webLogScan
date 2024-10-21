@@ -37,5 +37,4 @@ example : python3 wls.py -ss /var/log/apache2/log
 
 ## To do
 - Make the code more clean
-- Post request analyser
 - Save data in json format
