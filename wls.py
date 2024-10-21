@@ -1,88 +1,83 @@
 import sys
+import argparse
 from urllib.parse import unquote
 import subprocess
 
 
-SQLi_car = ["'", "--", "UNION", "AND", "OR", "DROP", "TABLE"]
-XSS_car = ["<", ">", "alert", "iframe"]
-SSTI_car = ['{', '}', '7*7']
-LFI_car = ['etc', 'passwd', '..']
+# Suspicious char
+detection_rules = {
+    "SQLi": ["'", "--", "UNION", "AND", "OR", "DROP", "TABLE"],
+    "XSS ": ['<', '>', "alert", "iframe", "onerror"],
+    "SSTI": ['{', '}', "7*7"],
+    "LFI ": ["etc", "passwd", "..", "%00"],
+    "RCE ": ['|', "wget", "curl", "$("]
+}
+# I deliberately added a space to certain names (like xss or rce) to improve the display
 
 
 def decode(line):
-    # On decode deux fois pour éviter les bypass par doubles encodages
+    # We decode twice to avoid bypasses by double encoding
     return unquote(unquote(line))
 
-def get_content(LOG_PATH):
-    file = open(LOG_PATH, 'r')
-    return file.read()
+def get_content_of_log_file(LOG_PATH):
+    return open(LOG_PATH, 'r').read()
 
-def bad_content_detector(content_log_file):
+def bad_content_detector(path):
     lines_with_bad_content = {}
+
+    content_log_file = get_content_of_log_file(path)
+    content_log_file = decode(content_log_file)
+
     for line in content_log_file.splitlines():
-        line = decode(line)
-        for car in SQLi_car:
-            if car in line:
-                lines_with_bad_content[line] = "SQLi"
-        for car in XSS_car:
-            if car in line:
-                lines_with_bad_content[line] = "Xss"
-        for car in SSTI_car:
-            if car in line:
-                lines_with_bad_content[line] = "SSTI"
-        for car in LFI_car:
-            if car in line:
-                lines_with_bad_content[line] = "LFI"
+        for attack_type, patterns in detection_rules.items():
+            for p in patterns:
+                if p in line:
+                    lines_with_bad_content[line] = attack_type
+                    break
     return lines_with_bad_content
 
 def simple_scan(path):
-    content_log = get_content(path)
-    suspect_lines = bad_content_detector(content_log)
+    suspect_lines = bad_content_detector(path)
     for cle, valeur in suspect_lines.items():
         print(valeur, " | ", cle)
 
 def ip_scan(path):
-    content_log = get_content(path)
-    suspect_lines = bad_content_detector(content_log)
+    suspect_lines = bad_content_detector(path)
     ip = list(set([i.split()[0] for i in suspect_lines]))
     print(ip)
+    return ip
 
 def ban_scan(path):
-    content_log = get_content(path)
-    suspect_lines = bad_content_detector(content_log)
-    ip_liste = list(set([i.split()[0] for i in suspect_lines]))
+    ip_liste = ip_scan(path)
+    rep = input("Are you sure you want to ban these IPs [Y/n] : ").lower()
+    if rep == "yes" or rep == "y" or rep == "":
+        subprocess.run(['ufw', 'enable'])
+        for ip in ip_liste:
+            subprocess.run(['ufw', 'deny', 'from', ip])
+        subprocess.run(['ufw', 'reload'])
+    
+def ui(args):
+    path = args.path
+    if args.simple_scan:
+        simple_scan(path)
+    elif args.ip_scan:
+        ip_scan(path)
+    elif args.ban_scan:
+        ban_scan(path)
+    else:
+        display_banner()
 
-    subprocess.run(['ufw', 'enable'])
-    for ip in ip_liste:
-        subprocess.run(['ufw', 'deny', 'from', ip])
-    subprocess.run(['ufw', 'reload'])
-
-def display_banner():
-    print("WLS - webLogScan")
-    print("by Carambole https://github.com/MrCarambole")
-    print("-"*50)
-    display_help()
-
-def display_help():
-    print("""Usage : python3 wls.py <arg> <path>
-          -ss simple scan : retrieve suspicious lines
-          -is ip scan : recover only the IPs responsible for suspicious requests
-          -bs ban scan : ban IPs that made suspicious requests
-          example : python3 wls.py -ss /var/log/apache2/log""")
-
-def ui(argv):
-        path = argv[-1]
-        if "-ss" in argv:
-            simple_scan(path)
-        elif "-is" in argv:
-            ip_scan(path)
-        elif "-bs" in argv:
-            ban_scan(path)
-        else:
-            display_banner()
 
 def main():
-    ui(sys.argv)
+    parser = argparse.ArgumentParser(description="Perform different types of scans.")
+    parser.add_argument("path", help="Path to the file to scan")
+    parser.add_argument("-ss", "--simple-scan", action="store_true", help="Perform a simple scan")
+    parser.add_argument("-is", "--ip-scan", action="store_true", help="Perform an IP scan")
+    parser.add_argument("-bs", "--ban-scan", action="store_true", help="Perform a ban scan")
+
+    args = parser.parse_args()
+    ui(args)
+
 
 if __name__ == '__main__':
     main()
