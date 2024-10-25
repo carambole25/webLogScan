@@ -34,9 +34,9 @@ positional arguments:
 
 options:
   -h, --help          show this help message and exit
-  -ss, --simple-scan  Perform a simple scan
-  -is, --ip-scan      Perform an IP scan
-  -bs, --ban-scan     Perform a ban scan
+  -ss, --simple-scan  Retrieve the line containing suspicious characters and the potential attack type
+  -is, --ip-scan      Retrieve suspicious IPs in a table
+  -bs, --ban-scan     Use ufw to ban suspicious IPs addresses
 
 example : python3 wls.py -ss /var/log/apache2/log
 ```
