@@ -71,9 +71,9 @@ def ui(args):
 def main():
     parser = argparse.ArgumentParser(description="Perform different types of scans.")
     parser.add_argument("path", help="Path to the file to scan")
-    parser.add_argument("-ss", "--simple-scan", action="store_true", help="Perform a simple scan")
-    parser.add_argument("-is", "--ip-scan", action="store_true", help="Perform an IP scan")
-    parser.add_argument("-bs", "--ban-scan", action="store_true", help="Perform a ban scan")
+    parser.add_argument("-ss", "--simple-scan", action="store_true", help="Retrieve the line containing suspicious characters and the potential attack type")
+    parser.add_argument("-is", "--ip-scan", action="store_true", help="Retrieve suspicious IPs in a table")
+    parser.add_argument("-bs", "--ban-scan", action="store_true", help="Use ufw to ban the suspicious IPs addresses")
 
     args = parser.parse_args()
     ui(args)
