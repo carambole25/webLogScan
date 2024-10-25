@@ -43,5 +43,6 @@ example : python3 wls.py -ss /var/log/apache2/log
 
 ## To do
 - [x] Add RCE detection
-- [x] Make the code more clean 
+- [x] Make the code more clean
+- [ ] Make a docker implementation
 - [ ] Save data in json format
