@@ -27,9 +27,6 @@ python3 wls.py -ss log
 ```
 
 ### Installation
-
-If you don't want to install it you can use its docker version (see below)
-
 ```
 git clone https://github.com/carambole25/webLogScan.git
 ```
