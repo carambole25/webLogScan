@@ -62,5 +62,6 @@ python3 wls.py -ss log > data.json
 ## To do
 - [x] Add RCE detection
 - [x] Make the code more clean
-- [x] Make a docker implementation
 - [x] Save data in json format
+- [ ] Generate graph
+- [ ] Make a docker implementation
