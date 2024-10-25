@@ -61,13 +61,6 @@ If you want to save the output, simply do:
 python3 wls.py -ss log > data.json
 ```
 
-### Docker implementation
-```
-docker run --rm carambole25/web-log-scan:latest
-docker run --rm -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -ss /logs/your_log_file
-docker run --rm -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -is /logs/your_log_file
-docker run --rm --network host --privileged -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -bs /logs/your_log_file
-```
 
 ## To do
 - [x] Add RCE detection
