@@ -2,18 +2,16 @@ import sys
 import argparse
 from urllib.parse import unquote
 import subprocess
-
+import json
 
 # Suspicious char
 detection_rules = {
-    "SQLi": ["'", "--", "UNION", "AND", "OR", "DROP", "TABLE"],
+    "SQLi": ["'--", "UNION", "AND", "OR", "DROP", "TABLE"],
     "XSS ": ['<', '>', "alert", "iframe", "onerror"],
     "SSTI": ['{', '}', "7*7"],
     "LFI ": ["etc", "passwd", "..", "%00"],
     "RCE ": ['|', "wget", "curl", "$("]
-}
-# I deliberately added a space to certain names (like xss or rce) to improve the display
-
+} # I deliberately added a space to certain names (like xss or rce) to improve the display
 
 def decode(line):
     # We decode twice to avoid bypasses by double encoding
@@ -24,6 +22,7 @@ def get_content_of_log_file(LOG_PATH):
 
 def bad_content_detector(path):
     lines_with_bad_content = {}
+    alert_number = 0
 
     content_log_file = get_content_of_log_file(path)
     content_log_file = decode(content_log_file)
@@ -32,20 +31,23 @@ def bad_content_detector(path):
         for attack_type, patterns in detection_rules.items():
             for p in patterns:
                 if p in line:
-                    lines_with_bad_content[line] = attack_type
+                    ip = line.split()[0]
+                    date = line.split()[3].replace("[", "")
+                    lines_with_bad_content[alert_number] = {"date": date, "attack type": attack_type, "ip": ip, "line":line}
+                    alert_number += 1
                     break
     return lines_with_bad_content
 
 def simple_scan(path):
     suspect_lines = bad_content_detector(path)
-    for cle, valeur in suspect_lines.items():
-        print(valeur, " | ", cle)
+    print(json.dumps(suspect_lines, indent=4))
 
 def ip_scan(path):
     suspect_lines = bad_content_detector(path)
-    ip = list(set([i.split()[0] for i in suspect_lines]))
-    print(ip)
-    return ip
+    ip_addresses = []
+    for key, value in suspect_lines.items():
+        ip_addresses.append(value.get("ip"))
+    print(ip_addresses)
 
 def ban_scan(path):
     ip_liste = ip_scan(path)
@@ -66,7 +68,6 @@ def ui(args):
         ban_scan(path)
     else:
         display_banner()
-
 
 def main():
     parser = argparse.ArgumentParser(description="Perform different types of scans.")
