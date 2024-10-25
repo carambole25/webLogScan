@@ -24,6 +24,7 @@ python3 wls.py -ss log
         "ip": "203.0.113.12",
         "line": "203.0.113.12 - - [22/Oct/2024:10:55:19 +0000] \"GET /product/1' UNION SELECT username, password FROM users-- HTTP/1.1\" 200 856 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)\""
     }
+}
 ```
 
 ### Installation
