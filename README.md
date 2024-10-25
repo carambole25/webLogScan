@@ -1,6 +1,8 @@
 # webLogScan 🎯
 A tool to analyze the Apache/nginx server web log and detect potential intrusion attempts.
 
+SQLi, Xss, SSTI, LFI and RCE.
+
 ```
 python3 wls.py -ss log 
 {
@@ -52,6 +54,11 @@ options:
   -bs, --ban-scan     Use ufw to ban suspicious IPs addresses
 
 example : python3 wls.py -ss /var/log/apache2/log
+```
+
+If you want to save the output, simply do:
+```
+python3 wls.py -ss log > data.json
 ```
 
 ### Docker implementation
