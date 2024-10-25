@@ -15,6 +15,9 @@ RCE   |  192.168.0.11 - - [21/Oct/2024:10:39:14 +0000] "GET /fonction?exec=toto 
 ```
 
 ### Installation
+
+If you don't want to install it you can use its docker version (see below)
+
 ```
 git clone https://github.com/carambole25/webLogScan.git
 ```
@@ -41,8 +44,16 @@ options:
 example : python3 wls.py -ss /var/log/apache2/log
 ```
 
+### Docker implementation
+```
+docker run --rm carambole25/web-log-scan:latest
+docker run --rm -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -ss /logs/your_log_file
+docker run --rm -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -is /logs/your_log_file
+docker run --rm --network host --privileged -v "$(pwd)/logpath/your_log_file:/logs/your_log_file" carambole25/web-log-scan:latest -bs /logs/your_log_file
+```
+
 ## To do
 - [x] Add RCE detection
 - [x] Make the code more clean
-- [ ] Make a docker implementation
+- [x] Make a docker implementation
 - [ ] Save data in json format
