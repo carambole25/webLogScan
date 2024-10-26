@@ -1,6 +1,8 @@
 # webLogScan 🎯
 A tool to analyze the Apache/nginx server web log and detect potential intrusion attempts.
 
+![graph](https://raw.githubusercontent.com/carambole25/webLogScan/refs/heads/main/graph_example.png)
+
 SQLi, Xss, SSTI, LFI and RCE.
 
 ```
