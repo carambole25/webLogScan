@@ -1,5 +1,5 @@
 # webLogScan 🎯
-A tool to analyze the Apache/nginx server web log and detect potential intrusion attempts.
+A tool to analyze the Apache/Nginx server web log and detect potential intrusion attempts.
 
 ![graph](https://raw.githubusercontent.com/carambole25/webLogScan/refs/heads/main/graph_example.png)
 
@@ -42,7 +42,9 @@ python3 wls.py
 
 ## Commande
 ```
-usage: wls.py [-h] [-ss] [-is] [-bs] path
+usage: wls.py [-h] [-ss] [-is] [-bs] [-gg] path
+
+Perform different types of scans.
 
 positional arguments:
   path                Path to the file to scan
@@ -51,7 +53,8 @@ options:
   -h, --help          show this help message and exit
   -ss, --simple-scan  Retrieve the line containing suspicious characters and the potential attack type
   -is, --ip-scan      Retrieve suspicious IPs in a table
-  -bs, --ban-scan     Use ufw to ban suspicious IPs addresses
+  -bs, --ban-scan     Use ufw to ban the suspicious IPs addresses
+  -gg, --gen-graph    Generate graph from json data (path = json data location)
 
 example : python3 wls.py -ss /var/log/apache2/log
 ```
@@ -66,5 +69,5 @@ python3 wls.py -ss log > data.json
 - [x] Add RCE detection
 - [x] Make the code more clean
 - [x] Save data in json format
-- [ ] Generate graph
+- [x] Generate graph
 - [ ] Make a docker implementation
