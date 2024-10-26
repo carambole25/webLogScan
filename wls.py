@@ -4,6 +4,8 @@ from urllib.parse import unquote
 import subprocess
 import json
 
+import graph
+
 # Suspicious char
 detection_rules = {
     "SQLi": ["'--", "UNION", "AND", "OR", "DROP", "TABLE"],
@@ -64,6 +66,8 @@ def ui(args):
         simple_scan(path)
     elif args.ip_scan:
         ip_scan(path)
+    elif args.gen_graph:
+        graph.gen_graph(path)
     elif args.ban_scan:
         ban_scan(path)
     else:
@@ -75,6 +79,7 @@ def main():
     parser.add_argument("-ss", "--simple-scan", action="store_true", help="Retrieve the line containing suspicious characters and the potential attack type")
     parser.add_argument("-is", "--ip-scan", action="store_true", help="Retrieve suspicious IPs in a table")
     parser.add_argument("-bs", "--ban-scan", action="store_true", help="Use ufw to ban the suspicious IPs addresses")
+    parser.add_argument("-gg", "--gen-graph", action="store_true", help="Generate graph from json data (path = json data location)")
 
     args = parser.parse_args()
     ui(args)
