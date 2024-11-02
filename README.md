@@ -33,7 +33,7 @@ python3 wls.py -ss log
 ```
 git clone https://github.com/carambole25/webLogScan.git
 cd webLogScan/
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 python3 wls.py
 ```
 
