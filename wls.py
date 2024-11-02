@@ -48,7 +48,8 @@ def ip_scan(path):
     suspect_lines = bad_content_detector(path)
     ip_addresses = []
     for key, value in suspect_lines.items():
-        ip_addresses.append(value.get("ip"))
+        if value.get("ip") not in ip_addresses:
+            ip_addresses.append(value.get("ip"))
     print(ip_addresses)
 
 def ban_scan(path):
