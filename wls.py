@@ -8,12 +8,12 @@ import graph
 
 # Suspicious char
 detection_rules = {
-    "SQLi": ["'--", "UNION", "AND", "OR", "DROP", "TABLE"],
-    "XSS ": ['<', '>', "alert", "iframe", "onerror"],
-    "SSTI": ['{', '}', "7*7"],
-    "LFI ": ["etc", "passwd", "..", "%00"],
-    "RCE ": ['|', "wget", "curl", "$("]
-} # I deliberately added a space to certain names (like xss or rce) to improve the display
+    "SQLi": ["'--", "UNION", "AND", "DROP", "TABLE", r"-- or #", "' OR '1", "UNION SELECT", "GROUP BY", "OR 1=1"],
+    "XSS": ['<script>', '</script>', "alert(", "<iframe>", "onerror", "'><img"],
+    "SSTI": ['{', '}', "7*7", "{{3*3}}" "{{7*7}}"],
+    "LFI": ["etc/passwd", "../", "%00", "....//", "/etc/shadow", "/etc/hosts"],
+    "RCE": ['|', "wget", "$("]
+}
 
 def decode(line):
     # We decode twice to avoid bypasses by double encoding
