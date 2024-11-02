@@ -71,9 +71,7 @@ def ui(args):
         graph.gen_graph(path)
     elif args.ban_scan:
         ban_scan(path)
-    else:
-        display_banner()
-
+        
 def main():
     parser = argparse.ArgumentParser(description="Perform different types of scans.")
     parser.add_argument("path", help="Path to the file to scan")
