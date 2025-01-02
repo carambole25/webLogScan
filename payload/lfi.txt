@@ -1,0 +1,8 @@
+etc/passwd
+../
+%00
+....//
+/etc/shadow
+/etc/hosts
+%252f
+php://filter

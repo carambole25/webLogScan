@@ -6,13 +6,21 @@ import json
 
 import graph
 
+sqli = open("./payload/sqli.txt", "r").readlines()
+xss = open("./payload/xss.txt", "r").readlines()
+ssti = open("./payload/ssti.txt", "r").readlines()
+lfi = open("./payload/lfi.txt", "r").readlines()
+rce = open("./payload/rce.txt", "r").readlines()
+
+nb_payload_tested = (len(sqli)+len(xss)+len(ssti)+len(lfi)+len(rce))
+
 # Suspicious char
 detection_rules = {
-    "SQLi": ["'--", "UNION", "AND", "DROP", "TABLE", r"-- or #", "' OR '1", "UNION SELECT", "GROUP BY", "OR 1=1"],
-    "XSS": ['<script>', '</script>', "alert(", "<iframe>", "onerror", "'><img"],
-    "SSTI": ['{', '}', "7*7", "{{3*3}}" "{{7*7}}"],
-    "LFI": ["etc/passwd", "../", "%00", "....//", "/etc/shadow", "/etc/hosts"],
-    "RCE": ['|', "wget", "$("]
+    "SQLi": [line.replace("\n", "") for line in sqli],
+    "XSS": [line.replace("\n", "") for line in xss],
+    "SSTI": [line.replace("\n", "") for line in ssti],
+    "LFI": [line.replace("\n", "") for line in lfi],
+    "RCE": [line.replace("\n", "") for line in rce]
 }
 
 def decode(line):
@@ -35,7 +43,7 @@ def bad_content_detector(path):
                 if p in line:
                     ip = line.split()[0]
                     date = line.split()[3].replace("[", "")
-                    lines_with_bad_content[alert_number] = {"date": date, "attack type": attack_type, "ip": ip, "line":line}
+                    lines_with_bad_content[alert_number] = {"date": date, "attack type": attack_type, "ip": ip, "line":line, "payload": p}
                     alert_number += 1
                     break
     return lines_with_bad_content
@@ -54,8 +62,9 @@ def ip_scan(path):
 
 def ban_scan(path):
     ip_liste = ip_scan(path)
-    rep = input("Are you sure you want to ban these IPs [Y/n] : ").lower()
-    if rep == "yes" or rep == "y" or rep == "":
+    rep = input("Are you sure you want to ban these IPs [y/N] : ").lower()
+    rep2 = input("The results may contain a lot of false positives are you really sure you want to ban the ips? [y/N] : ").lower()
+    if (rep == "yes" or rep == "y") and (rep2 == "yes" or rep2 == "y"):
         subprocess.run(['ufw', 'enable'])
         for ip in ip_liste:
             subprocess.run(['ufw', 'deny', 'from', ip])
